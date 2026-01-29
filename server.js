@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
@@ -25,6 +26,20 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
     persistSession: false,
   }
 });
+
+// Get JWT secret and Pollinations API key
+const jwtSecret = process.env.JWT_SECRET;
+const pollinationsApiKey = process.env.POLLINATIONS_API_KEY;
+
+if (!jwtSecret) {
+  console.error('Missing JWT_SECRET environment variable');
+  process.exit(1);
+}
+
+if (!pollinationsApiKey) {
+  console.error('Missing POLLINATIONS_API_KEY environment variable');
+  process.exit(1);
+}
 
 // Routes
 app.get('/', (req, res) => {
