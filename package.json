@@ -9,10 +9,11 @@
     "test": "node test-endpoints.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
+    "axios": "^1.13.4",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
@@ -22,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/adittaya/Black-rock-backend.git"
+    "url": "git+https://github.com/adittaya/Black-rock-backend.git"
   },
   "keywords": [
     "finance",
@@ -31,5 +32,10 @@
     "jwt"
   ],
   "author": "Black Rock Team",
-  "license": "ISC"
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/adittaya/Black-rock-backend/issues"
+  },
+  "homepage": "https://github.com/adittaya/Black-rock-backend#readme"
 }

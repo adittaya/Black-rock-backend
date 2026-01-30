@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
@@ -318,6 +319,82 @@ app.post('/validate-token', authenticateToken, (req, res) => {
   });
 });
 
+// AI Context Builder endpoint
+app.post('/api/ai-context-builder', authenticateToken, async (req, res) => {
+  try {
+    const { userId, userInput, systemPrompt, image } = req.body;
+
+    // Find user
+    const user = users.get(req.user.phoneNumber);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Get the Pollinations API key from environment variables
+    const pollinationsApiKey = process.env.POLLINATIONS_API_KEY;
+    if (!pollinationsApiKey) {
+      return res.status(500).json({
+        success: false,
+        message: 'Pollinations API key not configured'
+      });
+    }
+
+    // Prepare the messages array for the API
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userInput }
+    ];
+
+    // Include image if provided
+    if (image) {
+      messages[1] = {
+        role: 'user',
+        content: [
+          { type: 'text', text: userInput },
+          { type: 'image_url', image_url: { url: image } }
+        ]
+      };
+    }
+
+    // Call the Pollinations API
+    const response = await axios.post('https://api.pollinations.ai/v1/chat/completions', {
+      model: 'gpt-4o-mini',
+      messages: messages,
+      temperature: 0.7,
+      max_tokens: 500
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${pollinationsApiKey}`
+      }
+    });
+
+    const aiResponse = response.data.choices[0]?.message?.content || "I'm here to help! Could you clarify?";
+
+    res.json({
+      success: true,
+      text: aiResponse,
+      userId: user.uid,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error in AI context builder:', error);
+
+    // Return a generic response if the API call fails
+    const fallbackResponse = "Thank you for your message. As your customer care executive, I'm here to assist you with your BlackRock Financial Analytics Platform account. How else may I assist you today?";
+
+    res.status(200).json({
+      success: true,
+      text: fallbackResponse,
+      userId: req.user.phoneNumber,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // Health check endpoint
 app.get('/', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
@@ -332,6 +409,7 @@ app.listen(PORT, () => {
   console.log(`- PUT /update-profile - Update user profile (requires auth)`);
   console.log(`- POST /refresh-token - Refresh access token`);
   console.log(`- POST /validate-token - Validate token (requires auth)`);
+  console.log(`- POST /api/ai-context-builder - AI context builder (requires auth)`);
 });
 
 module.exports = app;
