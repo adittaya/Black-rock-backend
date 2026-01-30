@@ -1,11 +1,36 @@
 services:
   - type: web
-    name: black-rock-api
+    name: black-rock-backend-api
     env: node
+    region: frankfurt  # Using frankfurt as per original configuration
     buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: JWT_SECRET
+        sync: false  # This will be set in Render dashboard
+      - key: REFRESH_TOKEN_SECRET
+        sync: false  # This will be set in Render dashboard
+      - key: POLLINATIONS_API_KEY
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_TYPE
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_PROJECT_ID
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_PRIVATE_KEY_ID
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_CLIENT_ID
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_AUTH_URI
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_TOKEN_URI
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_AUTH_PROVIDER_X509_CERT_URL
+        sync: false  # This will be set in Render dashboard
+      - key: FIREBASE_CLIENT_X509_CERT_URL
         sync: false  # This will be set in Render dashboard
       - key: NODE_ENV
         value: production

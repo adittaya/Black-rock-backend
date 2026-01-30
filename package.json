@@ -1,7 +1,7 @@
 {
-  "name": "black-rock-backend",
-  "version": "1.0.0",
-  "description": "Backend server for Black Rock financial analytics platform",
+  "name": "blackrock-backend-api",
+  "version": "2.0.0",
+  "description": "Backend API server for BlackRock Financial Analytics Platform with Firebase integration and AI features",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,10 +9,12 @@
     "test": "node test-endpoints.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.93.3",
     "axios": "^1.13.4",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "firebase-admin": "^13.6.0",
     "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
@@ -29,9 +31,12 @@
     "finance",
     "analytics",
     "authentication",
-    "jwt"
+    "jwt",
+    "firebase",
+    "ai",
+    "pollinations"
   ],
-  "author": "Black Rock Team",
+  "author": "BlackRock Development Team",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
